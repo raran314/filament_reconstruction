@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 
 # Generate 3D random curve
 def generate_random_curve_3d(fixed_length, endpoint_distance, num_segments):
@@ -74,8 +75,11 @@ for _ in range(num_curves):
 unmasked_curves_array = np.array(all_unmasked_curves, dtype=object)
 masked_curves_array = np.array(all_masked_curves, dtype=object)
 
-# Save to CSV files
-np.savetxt('random_3d_curves_unmasked.csv', unmasked_curves_array, fmt='%s', delimiter=',')
-np.savetxt('random_3d_curves_masked.csv', masked_curves_array, fmt='%s', delimiter=',')
+# Save to Pickle files
+with open('random_3d_curves_unmasked.pkl', 'wb') as f:
+    pickle.dump(unmasked_curves_array, f)
 
-print("CSV files with 10,000 random 3D curves saved as 'random_3d_curves_unmasked.csv' and 'random_3d_curves_masked.csv'.")
+with open('random_3d_curves_masked.pkl', 'wb') as f:
+    pickle.dump(masked_curves_array, f)
+
+print("Pickle files with 10,000 random 3D curves saved as 'random_3d_curves_unmasked.pkl' and 'random_3d_curves_masked.pkl'.")
