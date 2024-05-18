@@ -12,6 +12,20 @@ def generate_random_unit_vector():
     random_vector = np.random.randn(3)
     return random_vector / np.linalg.norm(random_vector)
 
+def generate_random_initial_point(N, segment_length):
+    """
+    Generates a random initial point within a box with side length N*segment_length centered at the origin.
+
+    Parameters:
+    N (int): Number of segments.
+    segment_length (float): Length of each segment.
+
+    Returns:
+    np.ndarray: A 3D point.
+    """
+    half_length = (N * segment_length) / 2
+    return np.random.uniform(-half_length, half_length, size=3)
+
 def generate_wlc_3d(N, Lp, segment_length=1.0):
     """
     Generates a 3D worm-like chain with N segments and persistence length Lp.
@@ -37,7 +51,11 @@ def generate_wlc_3d(N, Lp, segment_length=1.0):
         tangents[i] = np.dot(rotation_matrix, tangents[i-1])
 
     # Integrate tangent vectors to get positions
-    positions = np.cumsum(tangents, axis=0)
+    positions = np.zeros((N, 3))
+    positions[0] = generate_random_initial_point(N, segment_length)
+
+    for i in range(1, N):
+        positions[i] = positions[i-1] + tangents[i] * segment_length
 
     return positions
 
@@ -66,7 +84,6 @@ segment_length = 1.0  # Length of each segment
 
 # Generate the WLC chain in 3D
 wlc_3d = generate_wlc_3d(N, Lp, segment_length)
-
 
 # smooth out with Gaussian kernel
 from scipy.ndimage import gaussian_filter1d
