@@ -50,17 +50,24 @@ def _rotation_matrix(axis, angle):
                      [2*(b*d - a*c), 2*(c*d + a*b), a*a + d*d - b*b - c*c]])
 
 # Parameters
-N = 100000  # Number of segments
-Lp = 2  # Persistence length
+N = 1000  # Number of segments
+Lp = 10  # Persistence length
 segment_length = 1.0  # Length of each segment
 
 # Generate the WLC chain in 3D
 wlc_3d = generate_wlc_3d(N, Lp, segment_length)
 
+# smooth out with Gaussian kernel
+from scipy.ndimage import gaussian_filter1d
+sigma = 10
+wlc_3d_smoothed = gaussian_filter1d(wlc_3d, sigma=sigma, axis=0)
+
+
 # Plotting the 3D curve
 fig = plt.figure(figsize=(10, 7))
 ax = fig.add_subplot(111, projection='3d')
 ax.plot(wlc_3d[:, 0], wlc_3d[:, 1], wlc_3d[:, 2], lw=1)
+ax.plot(wlc_3d_smoothed[:, 0], wlc_3d_smoothed[:, 1], wlc_3d_smoothed[:, 2], lw=1)
 ax.set_title('Worm-Like Chain in 3D')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
