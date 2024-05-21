@@ -92,34 +92,35 @@ def _rotation_matrix(axis, angle):
                      [2*(b*c + a*d), a*a + c*c - b*b - d*d, 2*(c*d - a*b)],
                      [2*(b*d - a*c), 2*(c*d + a*b), a*a + d*d - b*b - c*c]])
 
-# Parameters
-M = 5  # Number of chains
-N = 1000  # Number of segments per chain
-Lp = .20  # Persistence length
-segment_length = 1  # Length of each segment
+if __name__ == '__main__':    
+    # Parameters
+    M = 5  # Number of chains
+    N = 1000  # Number of segments per chain
+    Lp = .20  # Persistence length
+    segment_length = 1  # Length of each segment
 
-# Plotting the 3D curves
-fig = plt.figure(figsize=(10, 7))
-ax = fig.add_subplot(111, projection='3d')
-ax.set_title('Worm-Like Chains in 3D within Unit Sphere')
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-ax.set_zlabel('Z')
+    # Plotting the 3D curves
+    fig = plt.figure(figsize=(10, 7))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_title('Worm-Like Chains in 3D within Unit Sphere')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
 
-# Generate and plot M WLC chains in 3D
-for _ in range(M):
-    wlc_3d = generate_wlc_3d(N, Lp, segment_length)
-    # Smooth out with Gaussian kernel
-    sigma = 10
-    wlc_3d_smoothed = gaussian_filter1d(wlc_3d, sigma=sigma, axis=0)
-    ax.plot(wlc_3d_smoothed[:, 0], wlc_3d_smoothed[:, 1], wlc_3d_smoothed[:, 2], lw=1)
+    # Generate and plot M WLC chains in 3D
+    for _ in range(M):
+        wlc_3d = generate_wlc_3d(N, Lp, segment_length)
+        # Smooth out with Gaussian kernel
+        sigma = 10
+        wlc_3d_smoothed = gaussian_filter1d(wlc_3d, sigma=sigma, axis=0)
+        ax.plot(wlc_3d_smoothed[:, 0], wlc_3d_smoothed[:, 1], wlc_3d_smoothed[:, 2], lw=1)
 
-# Plot the unit sphere for reference
-u = np.linspace(0, 2 * np.pi, 100)
-v = np.linspace(0, np.pi, 100)
-x = np.outer(np.cos(u), np.sin(v))
-y = np.outer(np.sin(u), np.sin(v))
-z = np.outer(np.ones(np.size(u)), np.cos(v))
-ax.plot_surface(x, y, z, color='r', alpha=0.1)
+    # Plot the unit sphere for reference
+    u = np.linspace(0, 2 * np.pi, 100)
+    v = np.linspace(0, np.pi, 100)
+    x = np.outer(np.cos(u), np.sin(v))
+    y = np.outer(np.sin(u), np.sin(v))
+    z = np.outer(np.ones(np.size(u)), np.cos(v))
+    ax.plot_surface(x, y, z, color='r', alpha=0.1)
 
-plt.show()
+    plt.show()
